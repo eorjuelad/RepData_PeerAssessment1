@@ -60,6 +60,7 @@ imputedDataset <- dataSet[!incompCases,]
 totalStepsByDayImputed <- aggregate(steps ~ date, FUN = sum, data = imputedDataset)
 hist(totalStepsByDay$steps, main = "Total number of steps by day Imputed", xlab = "Steps")
 totalStepsByDayImputed
+
 ## 8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 timeSeriesWeek <- mutate(dataSetCompleteCases, day = ifelse(wday(date) %in% c(2,3,4,5,6) ,"Weekday","Weekend"))
 
