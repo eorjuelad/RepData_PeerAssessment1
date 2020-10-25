@@ -148,6 +148,25 @@ output:
 
 ![](PA1_template_files/figure-html/chunk 2-1.png)<!-- -->
 
+```r
+        ## Mean and median number of steps taken each day
+        meanSteps <- mean(totalStepsByDay$steps)
+        print(meanSteps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+        medianSteps <- median(totalStepsByDay$steps)
+        print(medianSteps)
+```
+
+```
+## [1] 10765
+```
+
 ## What is the average daily activity pattern?
 
 ```r
@@ -163,6 +182,7 @@ output:
 ![](PA1_template_files/figure-html/chunk 3-1.png)<!-- -->
 
 ```r
+        ## The 5-minute interval that, on average, contains the maximum number of steps
         filter(timeSeries, steps == max(steps))
 ```
 

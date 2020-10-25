@@ -29,6 +29,12 @@ output:
         totalStepsByDay <- aggregate(steps ~ date, FUN = sum, data = dataSetCompleteCases)
         print(totalStepsByDay)
         hist(totalStepsByDay$steps, main = "Total number of stepsby day", xlab = "Steps")
+        
+        ## Mean and median number of steps taken each day
+        meanSteps <- mean(totalStepsByDay$steps)
+        print(meanSteps)
+        medianSteps <- median(totalStepsByDay$steps)
+        print(medianSteps)
 ```
 
 ## What is the average daily activity pattern?
@@ -40,6 +46,8 @@ output:
         g <- g + labs(x = "Interval")
         g <- g + labs(title = "Average number of steps")
         g
+        
+        ## The 5-minute interval that, on average, contains the maximum number of steps
         filter(timeSeries, steps == max(steps))
 ```
 
