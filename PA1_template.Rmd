@@ -7,19 +7,73 @@ output:
 
 
 ## Loading and preprocessing the data
-
-
+```{r chunk 1, echo=TRUE}
+        library(dplyr)
+        library(ggplot2)
+        library(lubridate)
+        if (!file.exists('activity.csv')) {
+                unzip(zipfile = "activity.zip")
+        }
+        
+        dataSet <- read.csv("activity.csv", header = TRUE, na.strings = "NA")
+        dim(dataSet)
+        head(dataSet)
+        
+        compCases <- complete.cases(dataSet)
+        dataSetCompleteCases <- dataSet[compCases,]
+        #View(dataSetCompleteCases)
+```
 
 ## What is mean total number of steps taken per day?
-
-
+```{r chunk 2, echo=TRUE}
+        totalStepsByDay <- aggregate(steps ~ date, FUN = sum, data = dataSetCompleteCases)
+        print(totalStepsByDay)
+        hist(totalStepsByDay$steps, main = "Total number of stepsby day", xlab = "Steps")
+```
 
 ## What is the average daily activity pattern?
-
-
+```{r chunk 3, echo=TRUE}
+        timeSeries <- aggregate(steps ~ interval, FUN = mean, data = dataSetCompleteCases)
+        g <- ggplot(timeSeries, aes(x = interval, y = steps))
+        g <- g + geom_line() 
+        g <- g + labs(y = "Steps")
+        g <- g + labs(x = "Interval")
+        g <- g + labs(title = "Average number of steps")
+        g
+        filter(timeSeries, steps == max(steps))
+```
 
 ## Imputing missing values
-
-
+```{r chunk 4, echo=TRUE}
+        sum(is.na(as.character(dataSet$steps)))
+        sum(is.na(as.character(dataSet$date)))
+        sum(is.na(as.character(dataSet$interval)))
+        
+        incompCases <- complete.cases(dataSet)
+        dataSetIncompleteCases <- dataSet[!incompCases,]
+        totalStepsByDayImpute <- aggregate(steps ~ interval, FUN = mean, data = dataSetCompleteCases)
+        
+        for(i in 1:nrow(dataSet)){
+                if(is.na(dataSet$steps[i])){
+                        valueAux <- filter(totalStepsByDayImpute, totalStepsByDayImpute$interval == dataSet$interval[i])
+                        dataSet$steps[i] <- valueAux$steps
+                }
+        }
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r chunk 5, echo=TRUE}
+        timeSeriesWeek <- mutate(dataSetCompleteCases, day = ifelse(wday(date) %in% c(2,3,4,5,6) ,"Weekday","Weekend"))
+        
+        timeSeriesWD <- aggregate(steps ~ interval+day, FUN = mean, data = timeSeriesWeek)
+        
+        g <- ggplot(timeSeriesWD, aes(x = interval, y = steps))
+        g <- g + geom_line() 
+        g <- g + labs(y = "Steps")
+        g <- g + labs(x = "Interval")
+        g <- g + facet_grid(day ~ .)
+        g
+```
+
+
+
