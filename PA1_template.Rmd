@@ -59,6 +59,11 @@ output:
                         dataSet$steps[i] <- valueAux$steps
                 }
         }
+        
+        imputedDataset <- dataSet[!incompCases,]
+        totalStepsByDayImputed <- aggregate(steps ~ date, FUN = sum, data = imputedDataset)
+        hist(totalStepsByDay$steps, main = "Total number of steps by day Imputed", xlab = "Steps")
+        totalStepsByDayImputed
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
