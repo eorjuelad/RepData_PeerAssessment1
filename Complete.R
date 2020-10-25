@@ -1,7 +1,6 @@
 library(dplyr)
 library(ggplot2)
 library(lubridate)
-library(gridExtra)
 
 if (!file.exists('activity.csv')) {
         unzip(zipfile = "activity.zip")
